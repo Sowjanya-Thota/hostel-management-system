@@ -1,0 +1,280 @@
+// ======================
+// 1. Sass Configuration
+// ======================
+@use 'sass:color';
+@use 'bootstrap/scss/bootstrap' with (
+  $primary: #415A77,
+  $secondary: #cae9ff,
+  $dark: #1B263B,
+  $body-bg: #0D1B2A,
+  $body-color: #f8f9fa
+);
+
+// ======================
+// 2. Core Variables
+// ======================
+$text-muted: #b8b8b8;
+$sidebar-width: 100px;
+$navbar-height: 60px;
+$animation-easing: cubic-bezier(0.25, 0.1, 0.25, 1);
+$glow-intensity: 0.3;
+
+// ======================
+// 3. Layout Styles (Modified)
+// ======================
+.navbar {
+  // Changed from fixed to sticky for better behavior
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+  height: $navbar-height;
+  background-color: darken(bootstrap.$dark, 3%);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  
+  // Specific dashboard navbar styling
+  .dashboard-container & {
+    width: 100%;
+  }
+  
+  // Regular page navbar styling
+  .page-container & {
+    width: 100%;
+  }
+}
+
+// New container for regular pages
+.page-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  
+  .page-content {
+    flex: 1;
+    padding-top: $navbar-height;
+  }
+}
+
+// Modified dashboard styles
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+  
+  .main-content {
+    width: calc(100% - #{$sidebar-width});
+    min-height: 100vh;
+    position: relative;
+  }
+  
+  .dashboard-content {
+    min-height: calc(100vh - #{$navbar-height});
+  }
+}
+
+// ======================
+// 9. Home Page Specific Styles (Add this new section)
+// ======================
+.home-page {
+  .navbar {
+    position: relative;
+    width: 100%;
+    left: auto;
+  }
+  
+  .container {
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+  }
+}
+
+// ======================
+// 4. Card & Dashboard Styles
+// ======================
+.card {
+  border: none;
+  border-radius: 0.5rem;
+  background-color: lighten(bootstrap.$body-bg, 5%);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  &-header {
+    background-color: lighten(bootstrap.$body-bg, 8%);
+    border-bottom: 1px solid lighten(bootstrap.$body-bg, 10%);
+  }
+}
+
+.list-group-item {
+  background-color: transparent;
+  border-color: lighten(bootstrap.$body-bg, 10%);
+  color: bootstrap.$body-color;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: lighten(bootstrap.$body-bg, 5%);
+  }
+}
+
+// ======================
+// 5. Enhanced Navbar with Glow Effects
+// ======================
+.navbar-brand {
+  transition: all 0.3s $animation-easing;
+  display: flex;
+  align-items: center;
+  
+  &:hover {
+    .hostel-icon {
+      transform: scale(1.08);
+      filter: drop-shadow(0 0 6px rgba(255, 255, 255, $glow-intensity));
+      
+      .roof { animation: bounce 1s infinite alternate $animation-easing; }
+      .window { animation: glow 2s infinite alternate $animation-easing; }
+      .door { animation: gentleKnock 2s infinite $animation-easing; }
+    }
+    
+    .brand-text {
+      transform: scale(1.03);
+      text-shadow: 0 0 10px rgba(255, 255, 255, $glow-intensity),
+                  0 0 20px rgba(255, 255, 255, $glow-intensity * 0.6);
+    }
+  }
+  
+  .brand-text {
+    transition: all 0.3s $animation-easing;
+    font-weight: 500;
+    margin-left: 8px;
+  }
+}
+
+.hostel-icon {
+  width: 40px;
+  height: 40px;
+  transition: transform 0.3s $animation-easing, 
+              filter 0.4s $animation-easing;
+  
+  .building {
+    fill: none;
+    stroke: currentColor;
+    stroke-linejoin: round;
+  }
+  
+  .roof { 
+    stroke-width: 1;
+    transform-origin: center ; 
+    stroke: currentColor;
+
+  }
+  
+  .window {
+    fill: bootstrap.$body-color;
+    transition: fill 0.5s ease;
+  }
+  
+  .door {
+    stroke-linecap: round;
+    transform-origin: 10% 100%;
+    fill:#cae9ff;
+  }
+}
+
+// ======================
+// 6. Refined Animations
+// ======================
+@keyframes bounce {
+  to { transform: translateY(-1px); }
+}
+
+@keyframes glow {
+  50% { 
+    fill: bootstrap.$secondary; 
+    opacity: 0.9;
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.7));
+  }
+}
+
+@keyframes gentleKnock {
+  0%, 100% { transform: rotate(0) translateY(0); }
+  30% { transform: rotate(-1.2deg) translateY(-0.3px); }
+  60% { transform: rotate(0.8deg) translateY(-0.2px); }
+}
+
+// ======================
+// 7. Utilities
+// ======================
+.text-muted {
+  color: $text-muted;
+}
+
+.btn-custom {
+  @extend .btn;
+  background-color: bootstrap.$secondary;
+  transition: all 0.2s $animation-easing;
+  
+  &:hover {
+    background-color: color.scale(bootstrap.$secondary, $lightness: -8%);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+}
+
+// ======================
+// 8. Responsive Adjustments
+// ======================
+@include bootstrap.media-breakpoint-down(lg) {
+  .sidebar {
+    transform: translateX(-100%);
+    z-index: 1040;
+    
+    &.show {
+      transform: translateX(0);
+    }
+  }
+  
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+  }
+  
+  .navbar {
+    left: 0;
+  }
+}
+
+// ======================
+// 9. Table Styles (Add this new section)
+// ======================
+
+// Add this to your existing SCSS
+.table {
+  --bs-table-color: #cae9ff; // Your $secondary color
+  --bs-table-bg: transparent;
+  --bs-table-border-color: #415A77; // Your $primary color
+  --bs-table-striped-bg: rgba(202, 233, 255, 0.05);
+  --bs-table-hover-bg: rgba(202, 233, 255, 0.1);
+  
+  color: var(--bs-table-color);
+  border-color: var(--bs-table-border-color);
+  
+  th {
+    background-color: #415A77; // Your $primary
+    color: #f8f9fa; // Your $body-color
+    border-bottom-width: 2px;
+  }
+  
+  td {
+    vertical-align: middle;
+  }
+  
+  &.table-hover tbody tr:hover {
+    color: var(--bs-table-color);
+  }
+}
+
+// Force override any Bootstrap defaults
+.table > :not(:first-child) {
+  border-top: 2px solid #415A77; // Your $primary
+}
