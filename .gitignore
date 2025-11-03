@@ -1,0 +1,24 @@
+# Client ignores
+client/node_modules/
+client/dist/
+client/dist-ssr/
+client/logs/
+client/*.log
+client/*.local
+client/.vscode/
+client/.idea/
+
+# Server ignores
+server/node_modules/
+server/dist/
+server/logs/
+server/*.log
+server/.env
+
+# Common ignores
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
